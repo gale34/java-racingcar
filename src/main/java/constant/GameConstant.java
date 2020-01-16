@@ -4,8 +4,10 @@ public class GameConstant {
 
     private GameConstant(){}
 
-    public static final int _ZER0 = 0;
-    public static final int MOVEMENT_STANDARD = 4;
-    public static final String _EMPTY = "";
-    public static final String ROAD = "-";
+    public static final int ZERO = 0;
+    public static final int EXCLUDE_NUMBER = 10;
+    public static final int STANDARD_MOVEMENT = 4;
+    public static final String EMPTY_LOAD = "";
+    public static final String DISTANCE = "-";
+
 }
