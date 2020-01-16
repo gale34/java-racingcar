@@ -3,9 +3,11 @@ package game.racing;
 import java.util.ArrayList;
 import java.util.List;
 
+import static constant.GameConstant.ZERO;
+
 final class RacingCars {
 
-    private int tryCount = 0;
+    private int tryCount = ZERO;
     List<Car> cars = new ArrayList<>();
 
     public RacingCars(final int number, final int tryCount){
