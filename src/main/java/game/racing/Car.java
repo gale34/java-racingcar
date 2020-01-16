@@ -2,14 +2,14 @@ package game.racing;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static constant.GameConstant.*;
 
-final class Car implements MovementStrategy {
+final class Car {
 
+    private MovementStrategy movementStrategy = new RandomMovementStrategy();
     private int tryCount = ZERO;
-    List<String> tracked = new ArrayList<>();
+    private List<String> tracked = new ArrayList<>();
 
     Car(final int tryCount){
         this.tryCount = tryCount;
@@ -33,12 +33,6 @@ final class Car implements MovementStrategy {
     }
 
     private boolean isMovable(){
-        return (getValueByStrategy() == STANDARD_MOVEMENT);
-    }
-
-    @Override
-    public int getValueByStrategy() {
-        return ThreadLocalRandom.current()
-                .nextInt(ZERO, EXCLUDE_NUMBER);
+        return (movementStrategy.getValueByStrategy() == STANDARD_MOVEMENT);
     }
 }

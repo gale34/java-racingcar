@@ -33,8 +33,11 @@ public class RacingGame implements Game {
             System.out.println(console.askTryCount());
             final int tryCount = toInt(keyboard.listenTryCount());
 
+            final RacingCars racingCars = new RacingCars(number, tryCount);
+
             System.out.println(console.printResult());
-            new RacingCars(number, tryCount).go();
+            racingCars.go();
+            racingCars.trackedPrint();
 
             System.out.println(console.askContinue());
             isContinue = keyboard.listenContinue();

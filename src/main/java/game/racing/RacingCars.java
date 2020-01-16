@@ -5,7 +5,7 @@ import java.util.List;
 
 final class RacingCars {
 
-    int tryCount = 0;
+    private int tryCount = 0;
     List<Car> cars = new ArrayList<>();
 
     public RacingCars(final int number, final int tryCount){
@@ -18,7 +18,9 @@ final class RacingCars {
 
     public void go(){
         cars.forEach(Car::move);
+    }
 
+    public void trackedPrint(){
         final int size = cars.size();
 
         for(int i = 0; i < tryCount; i++) {
