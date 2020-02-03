@@ -7,9 +7,14 @@ import java.util.Arrays;
 public class RacingGameUtil {
 
     private static final String COMMA_DELIMITER = ",";
+    private static final String BLANK_DELIMITER = " ";
 
-    public static String[] separateCarNames(String line) {
+    public static String[] separateCarNamesWithComma(String line) {
         return line.split(COMMA_DELIMITER);
+    }
+
+    public static String[] separateCarNamesWithBlank(String line) {
+        return line.split(BLANK_DELIMITER);
     }
 
     public static Boolean isNoneEmpty(String[] strings) {

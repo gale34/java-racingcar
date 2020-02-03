@@ -2,16 +2,14 @@ import game.racing.car.event.Events;
 import game.racing.car.event.GameOverEvent;
 import game.racing.car.event.RoundOverEvent;
 import game.racing.car.service.RacingGame;
+import game.racing.car.view.InputConsoleView;
 import game.racing.car.view.RacingGameView;
 import game.racing.car.view.impl.RacingGameConsoleView;
 
-import static game.racing.car.view.InputConsoleView.inputCarNames;
-import static game.racing.car.view.InputConsoleView.inputRoundCount;
-
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        String carNames = inputCarNames();
-        Integer roundCount = inputRoundCount();
+        String carNames = InputConsoleView.inputCarNames();
+        Integer roundCount = InputConsoleView.inputRoundCount();
 
         RacingGame racingGame = new RacingGame(carNames, roundCount);
         RacingGameView racingGameView = new RacingGameConsoleView();

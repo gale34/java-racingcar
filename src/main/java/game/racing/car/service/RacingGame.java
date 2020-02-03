@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static game.racing.car.utils.RacingGameUtil.isNoneEmpty;
-import static game.racing.car.utils.RacingGameUtil.separateCarNames;
 
 public class RacingGame {
     private static final Long WAIT_NEXT_ROUND = 500L;

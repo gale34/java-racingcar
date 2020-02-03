@@ -1,15 +1,33 @@
+import static game.racing.car.view.WebConsoleView.renderGameStartPage;
+import static game.racing.car.view.WebConsoleView.renderIndexPage;
 import static spark.Spark.*;
 
-import spark.ModelAndView;
-import spark.template.handlebars.HandlebarsTemplateEngine;
-
-import java.util.Map;
+import game.racing.car.event.Events;
+import game.racing.car.event.GameOverEvent;
+import game.racing.car.service.RacingGame;
+import game.racing.car.view.RacingGameView;
+import game.racing.car.view.impl.WebGameVIew;
 
 public class WebMain {
 
     public static void main(String[] args) throws InterruptedException {
         port(8080);
-        get("/", (req, res) -> render(null,"/index.html"));
+
+        registerRacingGameEvents(new WebGameVIew());
+
+        get("/", (req, res) -> renderIndexPage());
+
+        post("/name", (req, res) -> renderGameStartPage(req));
+
+        post("/result", (req, res) -> {
+            Integer round = Integer.valueOf(req.queryParams("turn"));
+
+            RacingGame racingGame = new RacingGame()
+        });
+
+        Events.reset();
+
+
 /*        String carNames = inputCarNames();
         Integer roundCount = inputRoundCount();
 
@@ -23,13 +41,7 @@ public class WebMain {
         Events.reset();*/
     }
 
-    public static String render(Map<String, Object> model, String templatePath) {
-        return new HandlebarsTemplateEngine()
-                .render(new ModelAndView(model, templatePath));
-    }
-
-    /*private static void registerRacingGameEvents(RacingGameView racingGameView) {
-        Events.handle((RoundOverEvent event) -> racingGameView.showCurrentPosition(event.getCarPositions()));
+    private static void registerRacingGameEvents(RacingGameView racingGameView) {
         Events.handle((GameOverEvent event) -> racingGameView.showGameResult(event.getWinners()));
-    }*/
+    }
 }
