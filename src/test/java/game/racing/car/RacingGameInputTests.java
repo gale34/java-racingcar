@@ -21,7 +21,14 @@ public class RacingGameInputTests {
     @ParameterizedTest
     @ValueSource(strings = {"pobi,crong,honux", "t1,t2,t3", "abc,bcd,cde"})
     void normalCarNamesInputTest(String carNames) {
-        assertDoesNotThrow(() -> RacingGameUtil.separateCarNames(carNames));
+        assertDoesNotThrow(() -> RacingGameUtil.separateCarNamesWithComma(carNames));
+    }
+
+    @DisplayName("차 이름 테스트 - 공백이 구분자")
+    @ParameterizedTest
+    @ValueSource(strings = {"pobi crong honux", "t1 t2 t3", "abc bcd cde"})
+    void normalCarNamesWithBlankInputTest(String carNames) {
+        assertDoesNotThrow(() -> RacingGameUtil.separateCarNamesWithBlank(carNames));
     }
 
     @DisplayName("라운드 갯수가 0보다 작으면 에러가 발생한다.")

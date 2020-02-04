@@ -3,7 +3,6 @@ package game.racing.car.service;
 import game.racing.car.event.Events;
 import game.racing.car.event.GameOverEvent;
 import game.racing.car.event.RoundOverEvent;
-import game.racing.car.model.RacingGameFactory;
 import game.racing.car.model.dto.CarPosition;
 import game.racing.car.model.dto.RacingRoundResult;
 import spark.Request;
@@ -15,14 +14,12 @@ import static game.racing.car.utils.RacingGameUtil.separateCarNamesWithBlank;
 
 public class RacingGameWebRequestHandler {
 
-    private static final String CAR_NAMES_REQUEST_PARAMETER = "names";
     private static final String CAR_NAMES_RESPONSE_PARAMETER = "cars";
-    private static final String ROUND_COUNT_REQUEST_PARAMETER = "turn";
     private static final String GAME_RESULT_WINNER_PARAMETER = "winners";
     private static final String GAME_RESULT_ROUND_PARAMETER = "round";
 
-    public static Map<String, Object> handleNameRequest(Request request, RacingGameFactory racingGameFactory) {
-        String[] carNamesArray = separateCarNamesWithBlank(request.queryParams(CAR_NAMES_REQUEST_PARAMETER));
+    public static Map<String, Object> handleNameRequest(String carNameStr, RacingGameFactory racingGameFactory) {
+        String[] carNamesArray = separateCarNamesWithBlank(carNameStr);
         racingGameFactory.setCarNames(carNamesArray);
 
         List<String> carNames = Arrays.asList(carNamesArray);
@@ -31,13 +28,13 @@ public class RacingGameWebRequestHandler {
         return model;
     }
 
-    public static Map<String, Object> handleResultRequest(Request request, RacingGameFactory racingGameFactory) {
-        Integer roundCount = Integer.valueOf(request.queryParams(ROUND_COUNT_REQUEST_PARAMETER));
+    public static Map<String, Object> handleResultRequest(String roundCountStr, RacingGameFactory racingGameFactory) {
+        Integer roundCount = Integer.valueOf(roundCountStr);
         racingGameFactory.setRoundCount(roundCount);
 
         Map<String, Object> model = new HashMap<>();
-
         registerRacingGameEvents(model);
+
         RacingGame racingGame = racingGameFactory.create();
         racingGame.start();
 

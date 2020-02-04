@@ -1,6 +1,6 @@
-package game.racing.car.model;
+package game.racing.car.service;
 
-import game.racing.car.service.RacingGame;
+import game.racing.car.model.Cars;
 
 public class RacingGameFactory {
     private String[] carNames;
@@ -15,18 +15,18 @@ public class RacingGameFactory {
     }
 
     public RacingGame create() {
-        if(!isReady()) {
+        if (!isReady()) {
             throw new RuntimeException("car or round count invalid.");
         }
         return new RacingGame(new Cars(carNames), roundCount);
     }
 
     private Boolean isReady() {
-        if(carNames.length == 0) {
+        if (carNames.length == 0) {
             return false;
         }
 
-        if(roundCount < 0) {
+        if (roundCount < 0) {
             return false;
         }
 
