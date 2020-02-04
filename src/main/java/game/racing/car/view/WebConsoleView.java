@@ -1,14 +1,16 @@
 package game.racing.car.view;
 
-        import game.racing.car.utils.RacingGameUtil;
-        import spark.ModelAndView;
-        import spark.Request;
-        import spark.template.handlebars.HandlebarsTemplateEngine;
+import com.github.jknack.handlebars.Handlebars;
+import spark.ModelAndView;
+import spark.Request;
+import spark.template.handlebars.HandlebarsTemplateEngine;
 
-        import java.util.Arrays;
-        import java.util.HashMap;
-        import java.util.List;
-        import java.util.Map;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static game.racing.car.utils.RacingGameUtil.separateCarNamesWithBlank;
 
 public class WebConsoleView {
 
@@ -16,28 +18,21 @@ public class WebConsoleView {
     private static final String GAME_START_PAGE = "/game.html";
     private static final String GAME_RESULT_PAGE = "/result.html";
 
-    private static final String CAR_NAMES_PARAMETER = "names";
+    private static final HandlebarsTemplateEngine templateEngine = new HandlebarsTemplateEngine();
 
     public static String renderIndexPage() {
         return render(null, INDEX_PAGE);
     }
 
-    public static String renderGameStartPage(Request request) {
-        Map<String, Object> model = new HashMap<>();
-
-        String carNameStr = request.queryParams(CAR_NAMES_PARAMETER);
-        List<String> carNames = Arrays.asList(RacingGameUtil.separateCarNamesWithBlank(carNameStr));
-        model.put("cars", carNames);
-
+    public static String renderGameStartPage(Map<String, Object> model) {
         return render(model, GAME_START_PAGE);
     }
 
-    public static String renderGameResultPage(Request request) {
-        return null;
+    public static String renderGameResultPage(Map<String, Object> model) {
+        return render(model, GAME_RESULT_PAGE);
     }
 
     public static String render(Map<String, Object> model, String templatePath) {
-        return new HandlebarsTemplateEngine()
-                .render(new ModelAndView(model, templatePath));
+        return templateEngine.render(new ModelAndView(model, templatePath));
     }
 }

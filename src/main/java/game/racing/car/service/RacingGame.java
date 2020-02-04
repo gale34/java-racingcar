@@ -10,15 +10,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static game.racing.car.utils.RacingGameUtil.isNoneEmpty;
+import static game.racing.car.utils.RacingGameUtil.separateCarNamesWithComma;
 
 public class RacingGame {
-    private static final Long WAIT_NEXT_ROUND = 500L;
-
     private Cars cars;
     private final Integer roundCount;
 
     public RacingGame(String carNameString, Integer roundCount) {
-        String[] carNames = separateCarNames(carNameString);
+        String[] carNames = separateCarNamesWithComma(carNameString);
         validate(carNames, roundCount);
 
         this.cars = new Cars(carNames);
@@ -30,10 +29,9 @@ public class RacingGame {
         this.roundCount = roundCount;
     }
 
-    public void start() throws InterruptedException {
+    public void start() {
         for (int i = 0; i < roundCount; i++) {
             runRound();
-            Thread.sleep(WAIT_NEXT_ROUND);
         }
 
         Events.raise(new GameOverEvent(getWinnerNames()));
