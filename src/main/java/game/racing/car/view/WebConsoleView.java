@@ -1,16 +1,9 @@
 package game.racing.car.view;
 
-import com.github.jknack.handlebars.Handlebars;
 import spark.ModelAndView;
-import spark.Request;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import static game.racing.car.utils.RacingGameUtil.separateCarNamesWithBlank;
 
 public class WebConsoleView {
 

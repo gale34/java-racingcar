@@ -4,8 +4,7 @@ import game.racing.car.event.Events;
 import game.racing.car.event.GameOverEvent;
 import game.racing.car.event.RoundOverEvent;
 import game.racing.car.model.dto.CarPosition;
-import game.racing.car.model.dto.RacingRoundResult;
-import spark.Request;
+import game.racing.car.model.dto.RoundWebResult;
 
 import java.util.*;
 
@@ -22,26 +21,39 @@ public class RacingGameWebRequestHandler {
         String[] carNamesArray = separateCarNamesWithBlank(carNameStr);
         racingGameFactory.setCarNames(carNamesArray);
 
-        List<String> carNames = Arrays.asList(carNamesArray);
-        Map<String, Object> model = new HashMap<>();
-        model.put(CAR_NAMES_RESPONSE_PARAMETER, carNames);
-        return model;
+        return putCarsToModel(carNamesArray);
     }
 
     public static Map<String, Object> handleResultRequest(String roundCountStr, RacingGameFactory racingGameFactory) {
         Integer roundCount = Integer.valueOf(roundCountStr);
         racingGameFactory.setRoundCount(roundCount);
 
-        Map<String, Object> model = new HashMap<>();
-        registerRacingGameEvents(model);
+        return putResultToModel(racingGameFactory);
+    }
 
+    private static Map<String, Object> putCarsToModel(String[] carNamesArray) {
+        List<String> carNames = Arrays.asList(carNamesArray);
+        Map<String, Object> model = new HashMap<>();
+        model.put(CAR_NAMES_RESPONSE_PARAMETER, carNames);
+        return model;
+    }
+
+    private static Map<String, Object> putResultToModel(RacingGameFactory racingGameFactory) {
+        Map<String, Object> model = new HashMap<>();
+
+        executeGame(racingGameFactory, model);
+        return model;
+    }
+
+    private static void executeGame(RacingGameFactory racingGameFactory, Map<String, Object> model) {
+        registerRacingGameEvents(model);
         RacingGame racingGame = racingGameFactory.create();
         racingGame.start();
 
-        while (!RacingGameComplete(model)) {
+        while (!racingGameComplete(model)) {
             // 레이싱 게임이 끝날때까지 대기.
         }
-        return model;
+        Events.reset();
     }
 
     private static void registerRacingGameEvents(Map<String, Object> model) {
@@ -50,12 +62,12 @@ public class RacingGameWebRequestHandler {
     }
 
     private static void saveCurrentPosition(Map<String, Object> model, List<CarPosition> carPositions) {
-        List<RacingRoundResult> roundCarPositions = new ArrayList<>();
+        List<RoundWebResult> roundCarPositions = new ArrayList<>();
         if (model.containsKey(GAME_RESULT_ROUND_PARAMETER)) {
-            roundCarPositions = (List<RacingRoundResult>) model.get(GAME_RESULT_ROUND_PARAMETER);
+            roundCarPositions = (List<RoundWebResult>) model.get(GAME_RESULT_ROUND_PARAMETER);
         }
 
-        roundCarPositions.add(new RacingRoundResult(roundCarPositions.size() + 1, convertToCarWebPosition(carPositions)));
+        roundCarPositions.add(new RoundWebResult(roundCarPositions.size() + 1, convertToCarWebPosition(carPositions)));
         model.put(GAME_RESULT_ROUND_PARAMETER, roundCarPositions);
     }
 
@@ -63,7 +75,7 @@ public class RacingGameWebRequestHandler {
         model.put(GAME_RESULT_WINNER_PARAMETER, winners);
     }
 
-    private static Boolean RacingGameComplete(Map<String, Object> model) {
+    private static Boolean racingGameComplete(Map<String, Object> model) {
         return model.containsKey(GAME_RESULT_WINNER_PARAMETER);
     }
 

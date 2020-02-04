@@ -1,6 +1,4 @@
-import game.racing.car.event.Events;
 import game.racing.car.service.RacingGameFactory;
-import game.racing.car.service.RacingGameWebRequestHandler;
 
 import java.util.Map;
 
@@ -29,7 +27,5 @@ public class WebMain {
             Map<String, Object> model = handleResultRequest(req.queryParams(ROUND_COUNT_REQUEST_PARAMETER), racingGameFactory);
             return renderGameResultPage(model);
         });
-
-        Events.reset();
     }
 }
