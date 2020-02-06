@@ -2,11 +2,11 @@ package game.racing.car.model.dto;
 
 import java.util.List;
 
-public class RoundWebResult {
+public class RacingRoundResult {
     private Integer roundNumber;
     private List<CarWebPosition> carWebPositions;
 
-    public RoundWebResult(Integer roundNumber, List<CarWebPosition> carWebPositions) {
+    public RacingRoundResult(Integer roundNumber, List<CarWebPosition> carWebPositions) {
         this.roundNumber = roundNumber;
         this.carWebPositions = carWebPositions;
     }
