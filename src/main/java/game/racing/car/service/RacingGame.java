@@ -16,12 +16,15 @@ public class RacingGame {
     private Cars cars;
     private final Integer roundCount;
 
-    public RacingGame(String carNameString, Integer roundCount) {
-        String[] carNames = separateCarNamesWithComma(carNameString);
+    public RacingGame(String[] carNames, Integer roundCount) {
         validate(carNames, roundCount);
 
         this.cars = new Cars(carNames);
         this.roundCount = roundCount;
+    }
+
+    public RacingGame(String carNameString, Integer roundCount) {
+        this(separateCarNamesWithComma(carNameString), roundCount);
     }
 
     public RacingGame(Cars cars, Integer roundCount) {
