@@ -6,6 +6,8 @@ import game.racing.car.event.RoundOverEvent;
 import game.racing.car.model.dto.CarPosition;
 import game.racing.car.model.dto.RacingRoundResult;
 import game.racing.car.service.RacingGame;
+import game.racing.car.service.RacingGameService;
+import game.racing.car.service.impl.RacingGameWebService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -27,8 +29,6 @@ public class ResultRoute {
 
         private static final String CAR_NAMES_PARAMETER = "names";
         private static final String ROUND_COUNT_REQUEST_PARAMETER = "turn";
-        private static final String GAME_RESULT_WINNER_PARAMETER = "winners";
-        private static final String GAME_RESULT_ROUND_PARAMETER = "round";
 
         private static final String GAME_RESULT_PAGE = "/result.html";
 
@@ -37,40 +37,12 @@ public class ResultRoute {
             Integer roundCount = Integer.valueOf(request.queryParams(ROUND_COUNT_REQUEST_PARAMETER));
             String[] carNames = request.session().attribute(CAR_NAMES_PARAMETER);
 
-            Map<String, Object> model = new HashMap<>();
-            registerRacingGameEvents(model);
-
             RacingGame racingGame = new RacingGame(carNames, roundCount);
-            racingGame.start();
-
-            while (!RacingGameComplete(model)) {
-                // 레이싱 게임이 끝날때까지 대기.
-            }
+            RacingGameService racingGameService = new RacingGameWebService(racingGame);
+            Map<String, Object> model = racingGameService.run();
             return render(model, GAME_RESULT_PAGE);
         }
 
-        private static void registerRacingGameEvents(Map<String, Object> model) {
-            Events.handle((RoundOverEvent event) -> saveCurrentPosition(model, event.getCarPositions()));
-            Events.handle((GameOverEvent event) -> saveGameResult(model, event.getWinners()));
-        }
-
-        private static void saveCurrentPosition(Map<String, Object> model, List<CarPosition> carPositions) {
-            List<RacingRoundResult> roundCarPositions = new ArrayList<>();
-            if (model.containsKey(GAME_RESULT_ROUND_PARAMETER)) {
-                roundCarPositions = (List<RacingRoundResult>) model.get(GAME_RESULT_ROUND_PARAMETER);
-            }
-
-            roundCarPositions.add(new RacingRoundResult(roundCarPositions.size() + 1, convertToCarWebPosition(carPositions)));
-            model.put(GAME_RESULT_ROUND_PARAMETER, roundCarPositions);
-        }
-
-        private static void saveGameResult(Map<String, Object> model, List<String> winners) {
-            model.put(GAME_RESULT_WINNER_PARAMETER, winners);
-        }
-
-        private static Boolean RacingGameComplete(Map<String, Object> model) {
-            return model.containsKey(GAME_RESULT_WINNER_PARAMETER);
-        }
 
     }
 }
